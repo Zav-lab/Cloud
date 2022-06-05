@@ -1,14 +1,15 @@
 version: '3'
+# Commands for Build and Start:
+# docker-compose -f app/docker-compose.dev.yml build
+# docker-compose -f app/docker-compose.dev.yml up -d
 
-# docker-compose -f docker-compose.dev.yml build
-# docker-compose -f docker-compose.dev.yml up -d
 services:
   app:
     build: ./app
     container_name: flask_azz_yt
-    command: gunicorn --bind 0.0.0.0:5000 app:app # WSGI server
+    command: gunicorn --bind 0.0.0.0:5000 app:app
     environment:
-      - DATABASE_URL=postgresql://az_user:az_psw@db:5432/az_dbname # путь до бд, см. db service
+      - DATABASE_URL= "" # connect to Yandex
     volumes:
       - ./app:/app
     expose:
@@ -20,17 +21,17 @@ services:
     volumes:
       - ./pg_db:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=az_user
-      - POSTGRES_PASSWORD=az_psw
-      - POSTGRES_DB=az_dbname
+      - POSTGRES_USER=bubnov
+      - POSTGRES_PASSWORD=bubnov
+      - POSTGRES_DB=bubnov_db
   pgadmin:
     image: dpage/pgadmin4
     depends_on:
       - db
     environment:
-      - PGADMIN_DEFAULT_EMAIL=root@azzrael.ru
-      - PGADMIN_DEFAULT_PASSWORD=azzrael_code_yt # если сменить здесь, то нужно удалить контентер
-      - PGADMIN_LISTEN_ADDRESS=0.0.0.0 # чтобы не было косяков с nginx лушче в одну сеть с app
+      - PGADMIN_DEFAULT_EMAIL=andreybybnov435@yandex.ru
+      - PGADMIN_DEFAULT_PASSWORD=bubnov
+      - PGADMIN_LISTEN_ADDRESS=0.0.0.0 # machine IP
       - PGADMIN_LISTEN_PORT=5555
   nginx:
     build: ./nginx
